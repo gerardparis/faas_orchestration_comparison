@@ -20,7 +20,7 @@ The project uses AWS SDK to create the state machines with code.
 All experiments create and run the State Machines directly from code, and obtain the compute times from the returned metadata.
 The code is also prepared to run for several configurations and execute several replicas of each experiment.
 
-You can run each experiment by executing each file in the [tests](src/test/java) folder in a jvm.
+You can run each experiment by executing each file in the [test/java](src/test/java) folder in a jvm.
 
 ```bash
 java -cp sf-examples-1.0.jar RunSequence
