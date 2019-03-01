@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>serverless_coord</groupId>
+    <artifactId>sf-examples</artifactId>
+    <version>1.0</version>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lambda.functionCode>
+            ${project.build.directory}/${project.build.finalName}.jar
+        </lambda.functionCode>
+        <lambda.version>${project.version}</lambda.version>
+        <lambda.publish>true</lambda.publish>
+        <lambda.forceUpdate>true</lambda.forceUpdate>
+
+        <!--CONFIG PROPERTIES-->
+        <lambda.roleArn>arn:aws:iam::XACCOUNTX:role/_role_name_</lambda.roleArn>
+        <lambda.functionNameSuffix>-d</lambda.functionNameSuffix>
+        <lambda.s3Bucket>_bucket_name_</lambda.s3Bucket>
+        <lambda.region>_REGION_</lambda.region>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <createDependencyReducedPom>false
+                    </createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.seanroy</groupId>
+                <artifactId>lambda-maven-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <region>${lambda.region}</region>
+                    <functionCode>${lambda.functionCode}</functionCode>
+                    <version>${lambda.version}</version>
+                    <lambdaRoleArn>${lambda.roleArn}</lambdaRoleArn>
+                    <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+                    <publish>${lambda.publish}</publish>
+                    <forceUpdate>${lambda.forceUpdate}</forceUpdate>
+                    <functionNameSuffix>${lambda.functionNameSuffix}
+                    </functionNameSuffix>
+                    <lambdaFunctionsJSON>
+                        [
+                        {
+                        "functionName": "Sloth",
+                        "description": "This lambda does nothing",
+                        "handler": "lambdas.SlothFunction",
+                        "timeout": 30
+                        }
+                        ]
+                    </lambdaFunctionsJSON>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-stepfunctions</artifactId>
+            <version>1.11.86</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
